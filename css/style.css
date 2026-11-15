@@ -1163,3 +1163,748 @@ body.light footer .footer-brand {
     background: rgba(244, 247, 251, .98)
   }
 }
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth-btns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Style chung giống hệt .icon-btn (height: 40px, border-radius: 12px) */
+.nav-pill-btn {
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  border-radius: 12px;
+  font: 600 13px Inter, sans-serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.25s;
+}
+
+.nav-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(37, 217, 255, 0.35);
+}
+
+/* Điểm nhấn nhẹ cho nút Đăng ký nhưng vẫn giữ khung chuẩn */
+.nav-pill-primary {
+  background: linear-gradient(135deg, rgba(109, 93, 252, 0.35), rgba(37, 217, 255, 0.2));
+  border-color: rgba(109, 93, 252, 0.5);
+}
+
+.nav-pill-primary:hover {
+  background: linear-gradient(135deg, var(--primary), #438cff);
+  border-color: transparent;
+}
+
+/* Ô User khi đã đăng nhập */
+.user-menu-container {
+  position: relative;
+}
+
+.user-trigger {
+  padding: 0 12px 0 6px;
+}
+
+.user-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font: 700 12px "Space Grotesk", sans-serif;
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary), var(--cyan));
+}
+
+.user-name {
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: 235px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: #0e1528;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  z-index: 90;
+}
+
+body.light .user-dropdown {
+  background: #ffffff;
+  box-shadow: 0 15px 40px rgba(23, 32, 51, 0.15);
+}
+
+.dropdown-header {
+  padding: 4px 6px 8px;
+}
+
+.dropdown-header strong {
+  display: block;
+  font-size: 14px;
+}
+
+.dropdown-email {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 2px 0 6px;
+  word-break: break-all;
+}
+
+.dropdown-role {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  color: var(--cyan);
+  background: rgba(37, 217, 255, 0.12);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--line);
+  margin: 6px 0;
+}
+
+.dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  font: 500 13px Inter, sans-serif;
+  cursor: pointer;
+  text-align: left;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+body.light .dropdown-item:hover {
+  background: rgba(23, 32, 51, 0.05);
+}
+
+.dropdown-item.text-danger {
+  color: var(--danger);
+}
+
+
+/* ===== MODAL AUTH (Dùng chung nếu có) ===== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 7, 15, 0.75);
+  backdrop-filter: blur(8px);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  z-index: 120;
+}
+
+.auth-modal-card {
+  position: relative;
+  width: min(420px, 100%);
+  padding: 28px;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: #0d1324;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+}
+
+body.light .auth-modal-card {
+  background: #ffffff;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 5px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  margin-bottom: 20px;
+}
+
+body.light .auth-tabs {
+  background: rgba(23, 32, 51, 0.06);
+}
+
+.auth-tab {
+  padding: 9px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  font: 600 13px Inter, sans-serif;
+  cursor: pointer;
+}
+
+.auth-tab.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+
+/* ===== HISTORY DRAWER (NGĂN KÉO LỊCH SỬ) ===== */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 7, 15, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 105;
+}
+
+.history-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(400px, 92vw);
+  height: 100vh;
+  background: #0b1020;
+  border-left: 1px solid var(--line);
+  z-index: 110;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
+
+.history-drawer.open {
+  transform: translateX(0);
+}
+
+body.light .history-drawer {
+  background: #f8fafe;
+}
+
+.drawer-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.drawer-header h3 {
+  font: 700 17px "Space Grotesk", sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.drawer-header small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.close-btn,
+.clear-history-btn {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.clear-history-btn:hover {
+  color: var(--danger);
+  border-color: rgba(255, 84, 112, 0.4);
+}
+
+.drawer-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history-item {
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+body.light .history-item {
+  background: #ffffff;
+}
+
+.history-item:hover {
+  border-color: rgba(37, 217, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.history-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 11px;
+}
+
+.history-type-tag {
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  background: rgba(109, 93, 252, 0.16);
+  color: var(--cyan);
+}
+
+.history-time {
+  color: var(--muted);
+}
+
+.history-snippet {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.history-action-hint {
+  font-size: 11px;
+  color: var(--cyan);
+}
+
+.empty-history {
+  text-align: center;
+  color: var(--muted);
+  padding: 50px 20px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+
+/* ===== LIGHT THEME CHO NAV PILL BUTTONS ===== */
+body.light .nav-pill-btn {
+  color: #172033;
+  background: rgba(23, 32, 51, 0.05);
+}
+
+body.light .nav-pill-btn:hover {
+  background: rgba(23, 32, 51, 0.1);
+}
+
+body.light .nav-pill-primary {
+  background: linear-gradient(135deg, rgba(109, 93, 252, 0.14), rgba(37, 217, 255, 0.14));
+  border-color: rgba(109, 93, 252, 0.35);
+}
+
+body.light .nav-pill-primary:hover {
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary), #438cff);
+}
+
+
+/* ===== RESPONSIVE MOBILE ===== */
+@media (max-width: 850px) {
+  .navbar > .icon-btn {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .nav-pill-btn span {
+    display: none; /* Thu gọn chữ thành icon trên màn hình nhỏ để không bị tràn */
+  }
+  .nav-pill-btn {
+    padding: 0 11px;
+  }
+  .auth-btns .nav-pill-btn span,
+  .auth-btns .nav-pill-btn {
+    display: inline-flex;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+}
+/* =========================================================
+   TRANG ĐĂNG NHẬP & ĐĂNG KÝ CAO CẤP (auth.html)
+   ========================================================= */
+.auth-wrapper {
+  min-height: calc(100vh - 78px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 5%;
+  position: relative;
+  z-index: 2;
+}
+
+.auth-container {
+  width: min(1060px, 100%);
+  display: grid;
+  grid-template-columns: 1.05fr 450px;
+  gap: 64px;
+  align-items: center;
+}
+
+/* --- Cột trái: Banner giới thiệu --- */
+.auth-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.auth-banner h1 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(38px, 4.6vw, 56px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 20px;
+}
+
+.auth-banner h1 span {
+  background: linear-gradient(90deg, #ffffff, var(--cyan), #9d83ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+body.light .auth-banner h1 span {
+  background: linear-gradient(90deg, #172033, var(--primary), #008fc4);
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.auth-banner > p {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.75;
+  margin-bottom: 30px;
+  max-width: 480px;
+}
+
+/* Danh sách quyền lợi dạng thẻ kính mini */
+.auth-perks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 460px;
+}
+
+.auth-perks li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.025);
+  backdrop-filter: blur(12px);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text);
+  transition: 0.25s;
+}
+
+.auth-perks li:hover {
+  border-color: rgba(37, 217, 255, 0.35);
+  transform: translateX(4px);
+}
+
+body.light .auth-perks li {
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.auth-perks li i {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(109, 93, 252, 0.22), rgba(37, 217, 255, 0.15));
+  color: var(--cyan);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* --- Cột phải: Khung thẻ Form Glassmorphism --- */
+.auth-card {
+  position: relative;
+  padding: 34px 32px;
+  border-radius: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(155deg, rgba(20, 28, 50, 0.88), rgba(10, 15, 29, 0.78));
+  backdrop-filter: blur(24px);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+body.light .auth-card {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(23, 32, 51, 0.1);
+  box-shadow: 0 25px 70px rgba(31, 45, 72, 0.12);
+}
+
+/* Thanh chuyển Tab Đăng nhập / Đăng ký */
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 5px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--line);
+  margin-bottom: 26px;
+}
+
+body.light .auth-tabs {
+  background: rgba(23, 32, 51, 0.06);
+}
+
+.auth-tab {
+  height: 40px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  font: 600 13.5px Inter, sans-serif;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.auth-tab:hover {
+  color: var(--text);
+}
+
+.auth-tab.active {
+  background: linear-gradient(135deg, var(--primary), #438cff);
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(109, 93, 252, 0.35);
+}
+
+/* Tiêu đề & Mô tả Form */
+.auth-form h2 {
+  font: 700 24px "Space Grotesk", sans-serif;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+.auth-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 22px;
+  line-height: 1.55;
+}
+
+/* Từng nhóm Input */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 7px;
+  opacity: 0.9;
+}
+
+.auth-input-box {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  height: 48px;
+  padding: 0 14px;
+  border-radius: 13px;
+  border: 1px solid var(--line);
+  background: rgba(7, 10, 18, 0.55);
+  transition: 0.25s;
+}
+
+body.light .auth-input-box {
+  background: #f6f8fc;
+}
+
+.auth-input-box:focus-within {
+  border-color: var(--cyan);
+  background: rgba(12, 18, 34, 0.85);
+  box-shadow: 0 0 0 4px rgba(37, 217, 255, 0.1);
+}
+
+body.light .auth-input-box:focus-within {
+  background: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(109, 93, 252, 0.1);
+}
+
+.auth-input-box > i {
+  color: var(--muted);
+  font-size: 14px;
+  width: 16px;
+  text-align: center;
+  transition: 0.25s;
+}
+
+.auth-input-box:focus-within > i {
+  color: var(--cyan);
+}
+
+body.light .auth-input-box:focus-within > i {
+  color: var(--primary);
+}
+
+.auth-input-box input {
+  flex: 1;
+  border: 0 !important;
+  background: transparent !important;
+  height: 100%;
+  padding: 0;
+  font-size: 14px;
+  color: var(--text);
+  box-shadow: none !important;
+}
+
+.auth-input-box input::placeholder {
+  color: #64718a;
+}
+
+/* Nút mắt ẩn/hiện mật khẩu */
+.toggle-pass {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.toggle-pass:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+body.light .toggle-pass:hover {
+  background: rgba(23, 32, 51, 0.07);
+}
+
+/* Thông báo lỗi */
+.auth-error {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 84, 112, 0.12);
+  border: 1px solid rgba(255, 84, 112, 0.3);
+  color: #ff7185;
+  font-size: 12.5px;
+  margin-bottom: 14px;
+}
+
+/* Nút Submit Full-width */
+.w-full {
+  width: 100%;
+  height: 48px;
+  justify-content: center;
+  font-size: 14.5px;
+  border-radius: 13px;
+  margin-top: 6px;
+}
+
+/* Responsive trên Tablet & Mobile */
+@media (max-width: 900px) {
+  .auth-container {
+    grid-template-columns: 1fr;
+    max-width: 450px;
+    gap: 0;
+  }
+  .auth-banner {
+    display: none;
+  }
+  .auth-card {
+    padding: 28px 22px;
+  }
+}
+/* ===== TINH CHỈNH NÚT "VỀ TRANG CHỦ" TRÊN AUTH PAGE ===== */
+.navbar .nav-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff !important; /* Luôn sáng rõ trên nền tối */
+  font: 600 13px Inter, sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.navbar .nav-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(37, 217, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.navbar .nav-pill-btn i {
+  color: var(--cyan);
+  font-size: 13px;
+}
+
+/* Light theme cho nút Về trang chủ */
+body.light .navbar .nav-pill-btn {
+  color: #172033 !important;
+  background: rgba(23, 32, 51, 0.06);
+}
+
+body.light .navbar .nav-pill-btn:hover {
+  background: rgba(23, 32, 51, 0.12);
+  border-color: rgba(109, 93, 252, 0.4);
+}
+
+body.light .navbar .nav-pill-btn i {
+  color: var(--primary);
+}

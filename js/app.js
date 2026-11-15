@@ -164,11 +164,8 @@ if (analyzeBtn) {
     analyzeBtn.innerHTML =
       '<i class="fa-solid fa-spinner fa-spin"></i> AI đang phân tích...';
 
-    const clientStart = performance.now();
-    console.log(`[client] Bắt đầu gửi request lúc ${new Date().toISOString()}`);
-
     try {
-      const response = await fetch("/api/analyze", {
+      const response = await fetch("http://localhost:3000/api/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -180,16 +177,10 @@ if (analyzeBtn) {
         }),
       });
 
-      console.log(
-        `[client] Nhận response sau ${(
-          (performance.now() - clientStart) /
-          1000
-        ).toFixed(1)}s`
-      );
-
       const data = await response.json();
       if (data.success) {
         showAIResult(data.result);
+        saveScanHistory(currentType, contentToAnalyze, data.result);
       } else {
         alert("Lỗi từ AI: " + data.error);
       }
@@ -270,6 +261,7 @@ const io = new IntersectionObserver(
   { threshold: 0.12 }
 );
 $$(".reveal").forEach((x) => io.observe(x));
+
 const cio = new IntersectionObserver(
   (es) =>
     es.forEach((e) => {
@@ -288,3 +280,162 @@ const cio = new IntersectionObserver(
   { threshold: 0.8 }
 );
 $$("[data-count]").forEach((x) => cio.observe(x));
+
+// =========================================================
+// QUẢN LÝ TÀI KHOẢN & LỊCH SỬ TRA CỨU (LƯU TRÊN LOCALSTORAGE)
+// =========================================================
+const USERS_KEY = "checkwise_users";
+const SESSION_KEY = "checkwise_current_user";
+
+function getCurrentUser() {
+  try {
+    return JSON.parse(localStorage.getItem(SESSION_KEY));
+  } catch {
+    return null;
+  }
+}
+
+function getHistoryStorageKey() {
+  const user = getCurrentUser();
+  return user ? `checkwise_history_${user.email}` : "checkwise_history_guest";
+}
+
+function updateNavbarAuthUI() {
+  const user = getCurrentUser();
+  const authButtons = $("#authButtons");
+  const userMenu = $("#userMenuContainer");
+  const historyLabel = $("#historyUserLabel");
+
+  if (user) {
+    authButtons?.classList.add("hidden");
+    userMenu?.classList.remove("hidden");
+    const avatarEl = $("#userAvatarText");
+    const nameEl = $("#userNameDisplay");
+    const dropdownNameEl = $("#dropdownUserName");
+    const dropdownEmailEl = $("#dropdownUserEmail");
+
+    if (avatarEl) avatarEl.textContent = user.name.trim().charAt(0).toUpperCase();
+    if (nameEl) nameEl.textContent = user.name;
+    if (dropdownNameEl) dropdownNameEl.textContent = user.name;
+    if (dropdownEmailEl) dropdownEmailEl.textContent = user.email;
+    if (historyLabel) historyLabel.textContent = `Tài khoản: ${user.email}`;
+  } else {
+    authButtons?.classList.remove("hidden");
+    userMenu?.classList.add("hidden");
+    $("#userDropdownMenu")?.classList.add("hidden");
+    if (historyLabel) historyLabel.textContent = "Chế độ khách (lưu trên máy)";
+  }
+}
+
+// Xử lý ẩn hiện Dropdown User trên Navbar
+$("#userProfileTrigger")?.addEventListener("click", (e) => {
+  e.stopPropagation();
+  $("#userDropdownMenu")?.classList.toggle("hidden");
+});
+
+document.addEventListener("click", () => {
+  $("#userDropdownMenu")?.classList.add("hidden");
+});
+
+// Xử lý Đăng xuất
+$("#logoutBtn")?.addEventListener("click", () => {
+  localStorage.removeItem(SESSION_KEY);
+  updateNavbarAuthUI();
+  alert("Đã đăng xuất tài khoản.");
+});
+
+// --- Quản lý Lịch sử tra cứu ---
+const typeLabels = {
+  message: "Tin nhắn",
+  link: "Đường link",
+  image: "Hình ảnh",
+  audio: "Âm thanh",
+  video: "Video",
+};
+
+function saveScanHistory(type, inputContent, aiResult) {
+  const key = getHistoryStorageKey();
+  const list = JSON.parse(localStorage.getItem(key) || "[]");
+  list.unshift({
+    id: Date.now(),
+    type,
+    typeLabel: typeLabels[type] || "Nội dung",
+    input: inputContent,
+    result: aiResult,
+    createdAt: new Date().toLocaleString("vi-VN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }),
+  });
+  localStorage.setItem(key, JSON.stringify(list.slice(0, 30))); // Lưu tối đa 30 mục gần nhất
+}
+
+function renderHistoryList() {
+  const container = $("#historyList");
+  if (!container) return;
+  const list = JSON.parse(localStorage.getItem(getHistoryStorageKey()) || "[]");
+
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div class="empty-history">
+        <i class="fa-solid fa-folder-open" style="font-size: 28px; margin-bottom: 10px; opacity: 0.5;"></i>
+        <p>Chưa có lịch sử tra cứu nào.<br/>Hãy thử phân tích một tin nhắn hoặc đường link!</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = list
+    .map(
+      (item) => `
+      <div class="history-item" data-id="${item.id}">
+        <div class="history-item-top">
+          <span class="history-type-tag">${item.typeLabel}</span>
+          <span class="history-time">${item.createdAt}</span>
+        </div>
+        <div class="history-snippet">${item.input.replace(/</g, "&lt;")}</div>
+        <div class="history-action-hint">Bấm để xem lại báo cáo AI →</div>
+      </div>
+    `
+    )
+    .join("");
+
+  container.querySelectorAll(".history-item").forEach((el) => {
+    el.addEventListener("click", () => {
+      const target = list.find((x) => String(x.id) === el.dataset.id);
+      if (target) {
+        closeHistoryDrawer();
+        showAIResult(target.result);
+      }
+    });
+  });
+}
+
+function openHistoryDrawer() {
+  renderHistoryList();
+  $("#historyDrawer")?.classList.add("open");
+  $("#historyOverlay")?.classList.remove("hidden");
+}
+
+function closeHistoryDrawer() {
+  $("#historyDrawer")?.classList.remove("open");
+  $("#historyOverlay")?.classList.add("hidden");
+}
+
+$("#toggleHistoryBtn")?.addEventListener("click", openHistoryDrawer);
+$("#dropdownHistoryBtn")?.addEventListener("click", openHistoryDrawer);
+$("#closeHistoryBtn")?.addEventListener("click", closeHistoryDrawer);
+$("#historyOverlay")?.addEventListener("click", closeHistoryDrawer);
+
+$("#clearHistoryBtn")?.addEventListener("click", () => {
+  if (confirm("Bạn có chắc muốn xóa toàn bộ lịch sử tra cứu này?")) {
+    localStorage.removeItem(getHistoryStorageKey());
+    renderHistoryList();
+  }
+});
+
+// Khởi chạy kiểm tra trạng thái đăng nhập khi mở trang
+updateNavbarAuthUI();

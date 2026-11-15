@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CHECKWISE — Đăng nhập & Đăng ký</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="auth-page">
+    <div class="noise"></div>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+
+    <!-- Thanh điều hướng gọn -->
+<header class="navbar">
+      <a href="index.html" class="brand">
+        <span class="brand-icon"><i class="fa-solid fa-shield-halved"></i></span>
+        <span>CHECK<span class="accent">WISE</span></span>
+      </a>
+
+      <div class="nav-right">
+        <a href="index.html" class="nav-pill-btn">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Về trang chủ</span>
+        </a>
+        <button class="icon-btn" id="themeBtn" aria-label="Đổi giao diện">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </header>
+
+    <main class="auth-wrapper">
+      <div class="auth-container">
+        <!-- Cột trái: Giới thiệu -->
+        <div class="auth-banner">
+          <div class="eyebrow">
+            <span class="pulse"></span> CHECKWISE ACCOUNT
+          </div>
+          <h1>Bảo vệ bản thân trước <span>rủi ro số</span>.</h1>
+          <p>
+            Tạo tài khoản miễn phí để lưu trữ toàn bộ lịch sử tra cứu tin nhắn,
+            đường link, hình ảnh và đồng bộ báo cáo phân tích AI mọi lúc.
+          </p>
+          <ul class="auth-perks">
+            <li>
+              <i class="fa-solid fa-clock-rotate-left"></i> Lưu lịch sử tra cứu
+              tự động theo tài khoản
+            </li>
+            <li>
+              <i class="fa-solid fa-shield-halved"></i> Xem lại cảnh báo rủi ro
+              bất cứ lúc nào
+            </li>
+            <li>
+              <i class="fa-solid fa-lock"></i> Dữ liệu riêng tư, thao tác nhanh
+              chóng
+            </li>
+          </ul>
+        </div>
+
+        <!-- Cột phải: Khung Form Đăng nhập / Đăng ký -->
+        <div class="auth-card">
+          <div class="auth-tabs">
+            <button type="button" class="auth-tab active" data-tab="login">
+              Đăng nhập
+            </button>
+            <button type="button" class="auth-tab" data-tab="register">
+              Đăng ký
+            </button>
+          </div>
+
+          <!-- FORM ĐĂNG NHẬP -->
+          <form id="loginForm" class="auth-form">
+            <h2>Chào mừng trở lại</h2>
+            <p class="auth-sub">
+              Nhập thông tin tài khoản CheckWise của bạn để tiếp tục.
+            </p>
+
+            <div class="form-group">
+              <label for="loginEmail">Email</label>
+              <div class="auth-input-box">
+                <i class="fa-regular fa-envelope"></i>
+                <input
+                  type="email"
+                  id="loginEmail"
+                  required
+                  placeholder="you@example.com"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="loginPassword">Mật khẩu</label>
+              <div class="auth-input-box">
+                <i class="fa-solid fa-lock"></i>
+                <input
+                  type="password"
+                  id="loginPassword"
+                  required
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  class="toggle-pass"
+                  data-target="loginPassword"
+                >
+                  <i class="fa-regular fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <p id="loginError" class="auth-error hidden"></p>
+            <button type="submit" class="btn btn-primary w-full">
+              <i class="fa-solid fa-right-to-bracket"></i> Đăng nhập
+            </button>
+          </form>
+
+          <!-- FORM ĐĂNG KÝ -->
+          <form id="registerForm" class="auth-form hidden">
+            <h2>Tạo tài khoản mới</h2>
+            <p class="auth-sub">
+              Chỉ mất 10 giây để kích hoạt kho lưu trữ lịch sử tra cứu.
+            </p>
+
+            <div class="form-group">
+              <label for="regName">Tên hiển thị</label>
+              <div class="auth-input-box">
+                <i class="fa-regular fa-user"></i>
+                <input
+                  type="text"
+                  id="regName"
+                  required
+                  placeholder="Ví dụ: Nguyễn Văn A"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="regEmail">Email</label>
+              <div class="auth-input-box">
+                <i class="fa-regular fa-envelope"></i>
+                <input
+                  type="email"
+                  id="regEmail"
+                  required
+                  placeholder="you@example.com"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="regPassword">Mật khẩu (tối thiểu 6 ký tự)</label>
+              <div class="auth-input-box">
+                <i class="fa-solid fa-lock"></i>
+                <input
+                  type="password"
+                  id="regPassword"
+                  minlength="6"
+                  required
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  class="toggle-pass"
+                  data-target="regPassword"
+                >
+                  <i class="fa-regular fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="regConfirm">Nhập lại mật khẩu</label>
+              <div class="auth-input-box">
+                <i class="fa-solid fa-shield-check"></i>
+                <input
+                  type="password"
+                  id="regConfirm"
+                  minlength="6"
+                  required
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+
+            <p id="registerError" class="auth-error hidden"></p>
+            <button type="submit" class="btn btn-primary w-full">
+              <i class="fa-solid fa-user-plus"></i> Đăng ký ngay
+            </button>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <script src="js/auth.js"></script>
+  </body>
+</html>

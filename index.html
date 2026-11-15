@@ -27,23 +27,66 @@
     <div class="bg-orb orb-3"></div>
 
     <header class="navbar">
-      <a href="#home" class="brand"
-        ><span class="brand-icon"
-          ><i class="fa-solid fa-shield-halved"></i></span
-        ><span>CHECK<span class="accent">WISE</span></span></a
-      >
-      <nav id="nav">
-        <a href="#home">Trang chủ</a><a href="#checker">Kiểm tra</a
-        ><a href="#knowledge">Kiến thức</a><a href="#guide">Hướng dẫn</a>
-      </nav>
-      <button class="icon-btn" id="themeBtn" aria-label="Đổi giao diện">
-        <i class="fa-solid fa-moon"></i>
-      </button>
-      <button class="menu-btn" id="menuBtn">
-        <i class="fa-solid fa-bars"></i>
-      </button>
-    </header>
+      <a href="#home" class="brand">
+        <span class="brand-icon"><i class="fa-solid fa-shield-halved"></i></span>
+        <span>CHECK<span class="accent">WISE</span></span>
+      </a>
 
+      <nav id="nav">
+        <a href="#home">Trang chủ</a>
+        <a href="#checker">Kiểm tra</a>
+        <a href="#knowledge">Kiến thức</a>
+        <a href="#guide">Hướng dẫn</a>
+      </nav>
+
+      <div class="nav-right">
+        <!-- Nút Lịch sử -->
+        <button class="nav-pill-btn" id="toggleHistoryBtn" title="Lịch sử tra cứu">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>Lịch sử</span>
+        </button>
+
+        <!-- Cụm Đăng nhập / Đăng ký (khi chưa đăng nhập) -->
+        <div id="authButtons" class="auth-btns">
+          <a href="auth.html" class="nav-pill-btn">Đăng nhập</a>
+          <a href="auth.html?mode=register" class="nav-pill-btn nav-pill-primary">Đăng ký</a>
+        </div>
+
+        <!-- Ô User (khi đã đăng nhập) -->
+        <div id="userMenuContainer" class="user-menu-container hidden">
+          <button class="nav-pill-btn user-trigger" id="userProfileTrigger" type="button">
+            <span class="user-avatar" id="userAvatarText">U</span>
+            <span class="user-name" id="userNameDisplay">Người dùng</span>
+            <i class="fa-solid fa-chevron-down" style="font-size: 10px; opacity: 0.7;"></i>
+          </button>
+
+          <div id="userDropdownMenu" class="user-dropdown hidden">
+            <div class="dropdown-header">
+              <strong id="dropdownUserName">Tên người dùng</strong>
+              <p class="dropdown-email" id="dropdownUserEmail">email@domain.com</p>
+              <span class="dropdown-role">Thành viên CheckWise</span>
+            </div>
+            <div class="dropdown-divider"></div>
+            <button id="dropdownHistoryBtn" class="dropdown-item" type="button">
+              <i class="fa-solid fa-clock-rotate-left"></i> Lịch sử tra cứu
+            </button>
+            <button id="logoutBtn" class="dropdown-item text-danger" type="button">
+              <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+            </button>
+          </div>
+        </div>
+
+        <!-- Nút Sáng / Tối -->
+        <button class="icon-btn" id="themeBtn" aria-label="Đổi giao diện">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+
+        <!-- Nút Menu Mobile -->
+        <button class="menu-btn" id="menuBtn">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </header>
     <main id="home">
       <section class="hero section reveal">
         <div class="hero-copy">
@@ -202,6 +245,7 @@
           </div>
         </div>
       </section>
+      
 
       <section id="result" class="result section hidden">
         <div class="result-card">
@@ -372,5 +416,22 @@
       <span>© 2026 CHECKWISE</span>
     </footer>
     <script src="js/app.js"></script>
+    <!-- NGĂN KÉO LỊCH SỬ TRA CỨU (DRAWER) -->
+<div id="historyOverlay" class="drawer-overlay hidden"></div>
+<aside id="historyDrawer" class="history-drawer">
+  <div class="drawer-header">
+    <div>
+      <h3><i class="fa-solid fa-clock-rotate-left"></i> Lịch sử tra cứu</h3>
+      <small id="historyUserLabel">Lưu trên trình duyệt hiện tại</small>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <button id="clearHistoryBtn" class="clear-history-btn" title="Xóa tất cả">
+        <i class="fa-solid fa-trash-can"></i>
+      </button>
+      <button id="closeHistoryBtn" class="close-btn">&times;</button>
+    </div>
+  </div>
+  <div id="historyList" class="drawer-list"></div>
+</aside>
   </body>
 </html>
