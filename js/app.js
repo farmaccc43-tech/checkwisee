@@ -165,7 +165,8 @@ if (analyzeBtn) {
       '<i class="fa-solid fa-spinner fa-spin"></i> AI đang phân tích...';
 
     try {
-      const response = await fetch("http://localhost:3000/api/analyze", {
+      // Dùng đường dẫn tương đối để chạy chuẩn xác cho cả Local (khi server.js serve file tĩnh) lẫn trên Render
+      const response = await fetch("/api/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -187,7 +188,7 @@ if (analyzeBtn) {
     } catch (error) {
       console.error(error);
       alert(
-        "Không thể kết nối đến Server Backend (đảm bảo bạn đã chạy node server.js)."
+        "Không thể kết nối đến Server Backend."
       );
     } finally {
       analyzeBtn.disabled = false;
@@ -282,7 +283,7 @@ const cio = new IntersectionObserver(
 $$("[data-count]").forEach((x) => cio.observe(x));
 
 // =========================================================
-// QUẢN LÝ TÀI KHOẢN & LỊCH SỬ TRA CỨU (LƯU TRÊN LOCALSTORAGE)
+// QUẢN LÝ TÀI KHOẢN & LỊCH SỬ TRA CỨU
 // =========================================================
 const USERS_KEY = "checkwise_users";
 const SESSION_KEY = "checkwise_current_user";
@@ -344,7 +345,7 @@ $("#logoutBtn")?.addEventListener("click", () => {
   alert("Đã đăng xuất tài khoản.");
 });
 
-// --- Quản lý Lịch sử tra cứu ---
+// --- Quản lý Lịch sử tra cứu & Ngăn kéo (Drawer) ---
 const typeLabels = {
   message: "Tin nhắn",
   link: "Đường link",
@@ -370,7 +371,7 @@ function saveScanHistory(type, inputContent, aiResult) {
       year: "numeric",
     }),
   });
-  localStorage.setItem(key, JSON.stringify(list.slice(0, 30))); // Lưu tối đa 30 mục gần nhất
+  localStorage.setItem(key, JSON.stringify(list.slice(0, 30)));
 }
 
 function renderHistoryList() {
@@ -416,20 +417,38 @@ function renderHistoryList() {
 
 function openHistoryDrawer() {
   renderHistoryList();
-  $("#historyDrawer")?.classList.add("open");
-  $("#historyOverlay")?.classList.remove("hidden");
+  const drawer = $("#historyDrawer");
+  const overlay = $("#historyOverlay");
+  
+  if (drawer) {
+    drawer.classList.remove("hidden");
+    setTimeout(() => drawer.classList.add("open"), 10);
+  }
+  if (overlay) {
+    overlay.classList.remove("hidden");
+  }
 }
 
 function closeHistoryDrawer() {
-  $("#historyDrawer")?.classList.remove("open");
-  $("#historyOverlay")?.classList.add("hidden");
+  const drawer = $("#historyDrawer");
+  const overlay = $("#historyOverlay");
+  
+  if (drawer) {
+    drawer.classList.remove("open");
+    setTimeout(() => drawer.classList.add("hidden"), 300);
+  }
+  if (overlay) {
+    overlay.classList.add("hidden");
+  }
 }
 
+// Gắn sự kiện mở/đóng ngăn kéo lịch sử
 $("#toggleHistoryBtn")?.addEventListener("click", openHistoryDrawer);
 $("#dropdownHistoryBtn")?.addEventListener("click", openHistoryDrawer);
 $("#closeHistoryBtn")?.addEventListener("click", closeHistoryDrawer);
 $("#historyOverlay")?.addEventListener("click", closeHistoryDrawer);
 
+// Gắn sự kiện xóa toàn bộ lịch sử
 $("#clearHistoryBtn")?.addEventListener("click", () => {
   if (confirm("Bạn có chắc muốn xóa toàn bộ lịch sử tra cứu này?")) {
     localStorage.removeItem(getHistoryStorageKey());

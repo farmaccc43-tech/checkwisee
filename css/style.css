@@ -1405,8 +1405,14 @@ body.light .auth-tabs {
   transition: transform 0.3s ease;
 }
 
+/* THÊM ĐOẠN NÀY ĐỂ TRÌNH DUYỆT HIỂU LỆNH ẨN/HIỆN */
 .history-drawer.open {
   transform: translateX(0);
+}
+
+.drawer-overlay.hidden,
+.history-drawer.hidden {
+  display: none !important;
 }
 
 body.light .history-drawer {
@@ -1907,4 +1913,25 @@ body.light .navbar .nav-pill-btn:hover {
 
 body.light .navbar .nav-pill-btn i {
   color: var(--primary);
+}.close-btn,
+.clear-history-btn {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: 0.2s;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.clear-history-btn:hover {
+  color: var(--danger, #ff5470);
+  border-color: rgba(255, 84, 112, 0.4);
 }

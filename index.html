@@ -415,23 +415,38 @@
       </p>
       <span>© 2026 CHECKWISE</span>
     </footer>
+  <!-- NGĂN KÉO LỊCH SỬ TRA CỨU (DRAWER) -->
+    <div id="historyOverlay" class="drawer-overlay hidden"></div>
+    <aside id="historyDrawer" class="history-drawer">
+      <div class="drawer-header">
+        <div>
+          <h3><i class="fa-solid fa-clock-rotate-left"></i> Lịch sử tra cứu</h3>
+          <small id="historyUserLabel">Lưu trên trình duyệt hiện tại</small>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <!-- Nút Xóa lịch sử -->
+          <button id="clearHistoryBtn" class="clear-history-btn" title="Xóa tất cả">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+          <!-- Nút Đóng (tắt) lịch sử -->
+          <button id="closeHistoryBtn" class="close-btn">&times;</button>
+        </div>
+      </div>
+      <div id="historyList" class="drawer-list"></div>
+    </aside>
+
+    <footer>
+      <div class="footer-brand">
+        <span class="brand-icon"><i class="fa-solid fa-shield-halved"></i></span>
+        <strong>CHECKWISE</strong>
+      </div>
+      <p>Công cụ giáo dục nhận biết dấu hiệu lừa đảo • Kết quả AI chỉ mang tính tham khảo.</p>
+      <span>© 2026 CHECKWISE</span>
+    </footer>
+
+    <!-- ĐẶT THẺ SCRIPT Ở ĐÂY (SAU KHI TOÀN BỘ HTML ĐÃ ĐƯỢC TẢI XONG) -->
     <script src="js/app.js"></script>
-    <!-- NGĂN KÉO LỊCH SỬ TRA CỨU (DRAWER) -->
-<div id="historyOverlay" class="drawer-overlay hidden"></div>
-<aside id="historyDrawer" class="history-drawer">
-  <div class="drawer-header">
-    <div>
-      <h3><i class="fa-solid fa-clock-rotate-left"></i> Lịch sử tra cứu</h3>
-      <small id="historyUserLabel">Lưu trên trình duyệt hiện tại</small>
-    </div>
-    <div style="display: flex; gap: 8px; align-items: center;">
-      <button id="clearHistoryBtn" class="clear-history-btn" title="Xóa tất cả">
-        <i class="fa-solid fa-trash-can"></i>
-      </button>
-      <button id="closeHistoryBtn" class="close-btn">&times;</button>
-    </div>
-  </div>
-  <div id="historyList" class="drawer-list"></div>
-</aside>
+  </body>
+</html>
   </body>
 </html>
