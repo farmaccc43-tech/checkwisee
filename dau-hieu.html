@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bộ poster nhận biết dấu hiệu lừa đảo - CHECKWISE.">
+  <title>Poster dấu hiệu lừa đảo — CHECKWISE</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <!-- CSS giao diện gốc -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- CSS riêng của trang poster -->
+  <link rel="stylesheet" href="css/poster.css">
+</head>
+
+<body>
+  <div class="noise"></div>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="index.html#home" class="brand">
+      <span class="brand-icon">
+        <i class="fa-solid fa-shield-halved"></i>
+      </span>
+      <span>CHECK<span class="accent">WISE</span></span>
+    </a>
+
+    <nav id="nav">
+      <a href="index.html#home">Trang chủ</a>
+      <a href="index.html#checker">Kiểm tra</a>
+      <a href="index.html#knowledge" class="active">Kiến thức</a>
+      <a href="index.html#guide">Hướng dẫn</a>
+    </nav>
+
+    <div class="nav-right">
+      <button
+        class="nav-pill-btn"
+        id="toggleHistoryBtn"
+        title="Lịch sử tra cứu"
+      >
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <span>Lịch sử</span>
+      </button>
+
+      <div id="authButtons" class="auth-btns">
+        <a href="auth.html" class="nav-pill-btn">Đăng nhập</a>
+        <a
+          href="auth.html?mode=register"
+          class="nav-pill-btn nav-pill-primary"
+        >
+          Đăng ký
+        </a>
+      </div>
+
+      <div id="userMenuContainer" class="user-menu-container hidden">
+        <button
+          class="nav-pill-btn user-trigger"
+          id="userProfileTrigger"
+          type="button"
+        >
+          <span class="user-avatar" id="userAvatarText">U</span>
+          <span class="user-name" id="userNameDisplay">Người dùng</span>
+          <i
+            class="fa-solid fa-chevron-down"
+            style="font-size:10px;opacity:.7"
+          ></i>
+        </button>
+
+        <div id="userDropdownMenu" class="user-dropdown hidden">
+          <div class="dropdown-header">
+            <strong id="dropdownUserName">Tên người dùng</strong>
+            <p class="dropdown-email" id="dropdownUserEmail">
+              email@domain.com
+            </p>
+            <span class="dropdown-role">Thành viên CheckWise</span>
+          </div>
+
+          <div class="dropdown-divider"></div>
+
+          <button
+            id="dropdownHistoryBtn"
+            class="dropdown-item"
+            type="button"
+          >
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            Lịch sử tra cứu
+          </button>
+
+          <button
+            id="logoutBtn"
+            class="dropdown-item text-danger"
+            type="button"
+          >
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Đăng xuất
+          </button>
+        </div>
+      </div>
+
+      <button
+        class="icon-btn"
+        id="themeBtn"
+        aria-label="Đổi giao diện"
+      >
+        <i class="fa-solid fa-moon"></i>
+      </button>
+
+      <button
+        class="menu-btn"
+        id="menuBtn"
+        aria-label="Mở menu"
+      >
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- NỘI DUNG POSTER -->
+  <main class="poster-page section">
+
+    <div class="section-heading poster-heading">
+      <div class="eyebrow">02 • KNOWLEDGE LIBRARY</div>
+
+      <h1>
+        Dấu hiệu cần <span>cảnh giác</span>
+      </h1>
+
+      <p>
+        Khám phá bộ poster hướng dẫn nhận biết các hình thức
+        lừa đảo thường gặp.
+      </p>
+    </div>
+
+    <section class="poster-viewer" aria-label="Trình chiếu poster">
+
+      <div class="poster-stage">
+
+        <button
+          class="poster-arrow prev"
+          id="prevPoster"
+          aria-label="Poster trước"
+        >
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <img
+          id="posterImage"
+          src="POSTER DẤU HIỆU TRƯỚC KHI MẮC BẪY/ÉP BẠN PHẢI LÀM NGAY (2).png"
+          alt="Poster: Ép bạn phải làm ngay"
+          draggable="false"
+        >
+
+        <button
+          class="poster-arrow next"
+          id="nextPoster"
+          aria-label="Poster tiếp theo"
+        >
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
+      </div>
+
+      <div class="poster-caption">
+        <div>
+          <span class="poster-kicker" id="posterKicker">
+            DẤU HIỆU 01
+          </span>
+
+          <h2 id="posterTitle">
+            Ép bạn phải làm ngay
+          </h2>
+        </div>
+
+        <span class="poster-counter" id="posterCounter">
+          01 / 06
+        </span>
+      </div>
+
+      <div class="poster-controls">
+
+        <div
+          class="poster-dots"
+          id="posterDots"
+          aria-label="Chọn poster"
+        ></div>
+
+        <a
+          class="btn btn-ghost"
+          id="openOriginal"
+          target="_blank"
+          rel="noopener"
+        >
+          <i class="fa-solid fa-up-right-from-square"></i>
+          Mở ảnh gốc
+        </a>
+
+      </div>
+    </section>
+
+    <div class="poster-back">
+      <a class="btn btn-primary" href="index.html#knowledge">
+        <i class="fa-solid fa-arrow-left"></i>
+        Quay lại kiến thức
+      </a>
+    </div>
+
+  </main>
+
+  <!-- LỊCH SỬ TRA CỨU -->
+  <div id="historyOverlay" class="drawer-overlay hidden"></div>
+
+  <aside id="historyDrawer" class="history-drawer">
+    <div class="drawer-header">
+
+      <div>
+        <h3>
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          Lịch sử tra cứu
+        </h3>
+
+        <small id="historyUserLabel">
+          Lưu trên trình duyệt hiện tại
+        </small>
+      </div>
+
+      <div style="display:flex;gap:8px;align-items:center">
+
+        <button
+          id="clearHistoryBtn"
+          class="clear-history-btn"
+          title="Xóa tất cả"
+        >
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+
+        <button id="closeHistoryBtn" class="close-btn">
+          &times;
+        </button>
+
+      </div>
+    </div>
+
+    <div id="historyList" class="drawer-list"></div>
+  </aside>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">
+      <span class="brand-icon">
+        <i class="fa-solid fa-shield-halved"></i>
+      </span>
+      <strong>CHECKWISE</strong>
+    </div>
+
+    <p>
+      Công cụ giáo dục nhận biết dấu hiệu lừa đảo •
+      Kết quả AI chỉ mang tính tham khảo.
+    </p>
+
+    <span>© 2026 CHECKWISE</span>
+  </footer>
+
+  <!-- JS GỐC VÀ JS TRÌNH CHIẾU -->
+  <script src="js/app.js"></script>
+  <script src="js/poster.js"></script>
+
+</body>
+</html>

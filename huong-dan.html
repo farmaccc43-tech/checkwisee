@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hướng dẫn sử dụng | CHECKWISE</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/huong-dan.css">
+</head>
+
+<body>
+  <div class="noise"></div>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  
+<header class="navbar">
+  <a href="index.html#home" class="brand">
+    <span class="brand-icon">
+      <i class="fa-solid fa-shield-halved"></i>
+    </span>
+    <span>CHECK<span class="accent">WISE</span></span>
+  </a>
+
+  <nav id="nav">
+    <a href="index.html#home">Trang chủ</a>
+    <a href="index.html#checker">Kiểm tra</a>
+    <a href="index.html#knowledge">Kiến thức</a>
+    <a href="index.html#rules">Quy tắc</a>
+  </nav>
+
+  <div class="nav-right">
+
+    <!-- KIỂM TRA NGAY -->
+    <a href="index.html#checker" class="nav-pill-btn">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      Kiểm tra ngay
+    </a>
+
+    <!-- ĐĂNG NHẬP / ĐĂNG KÝ -->
+    <div id="authButtons" class="auth-btns">
+      <a href="auth.html" class="nav-pill-btn">Đăng nhập</a>
+      <a href="auth.html?mode=register"
+         class="nav-pill-btn nav-pill-primary">
+        Đăng ký
+      </a>
+    </div>
+
+    <!-- TÀI KHOẢN SAU KHI ĐĂNG NHẬP -->
+    <div id="userMenuContainer"
+         class="user-menu-container hidden">
+
+      <button class="nav-pill-btn user-trigger"
+              id="userProfileTrigger"
+              type="button">
+
+        <span class="user-avatar" id="userAvatarText">U</span>
+
+        <span class="user-name" id="userNameDisplay">
+          Người dùng
+        </span>
+
+        <i class="fa-solid fa-chevron-down"
+           style="font-size:10px;opacity:.7"></i>
+      </button>
+
+      <div id="userDropdownMenu" class="user-dropdown hidden">
+
+        <div class="dropdown-header">
+          <strong id="dropdownUserName">Tên người dùng</strong>
+
+          <p class="dropdown-email" id="dropdownUserEmail">
+            email@domain.com
+          </p>
+
+          <span class="dropdown-role">
+            Thành viên CheckWise
+          </span>
+        </div>
+
+        <div class="dropdown-divider"></div>
+
+        <a href="index.html" class="dropdown-item">
+          <i class="fa-solid fa-house"></i>
+          Trang chủ
+        </a>
+
+        <button id="logoutBtn"
+                class="dropdown-item text-danger"
+                type="button">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          Đăng xuất
+        </button>
+
+      </div>
+    </div>
+
+    <!-- ĐỔI SÁNG / TỐI -->
+    <button class="icon-btn"
+            id="themeBtn"
+            aria-label="Đổi giao diện">
+      <i class="fa-solid fa-moon"></i>
+    </button>
+
+    <!-- MENU MOBILE -->
+    <button class="menu-btn" id="menuBtn">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+  </div>
+</header>
+
+
+  <main class="user-guide-page">
+
+    <!-- GIỚI THIỆU -->
+    <section class="guide-hero section reveal">
+      <div class="eyebrow">
+        <span class="pulse"></span>
+        CHECKWISE • USER GUIDE
+      </div>
+
+      <h1>Hướng dẫn sử dụng <span>CHECKWISE</span></h1>
+
+      <p>
+        Khám phá cách sử dụng các chức năng của CHECKWISE để phân tích
+        thông tin đáng ngờ, nhận diện nguy cơ và chủ động kiểm chứng
+        trước khi đưa ra quyết định.
+      </p>
+
+      <a href="#guide-steps" class="btn btn-primary">
+        <i class="fa-solid fa-play"></i>
+        Bắt đầu tìm hiểu
+      </a>
+    </section>
+
+    <!-- CÁC LOẠI NỘI DUNG -->
+    <section class="guide-formats section reveal">
+      <div class="section-heading">
+        <div class="eyebrow">01 • INPUT FORMATS</div>
+        <h2>Kiểm tra <span>5 loại nội dung</span></h2>
+        <p>CHECKWISE hỗ trợ các danh mục nội dung sau:</p>
+      </div>
+
+      <div class="format-grid">
+        <article class="format-card">
+          <i class="fa-solid fa-message"></i>
+          <h3>Tin nhắn</h3>
+          <p>SMS, Zalo, Messenger hoặc email có nội dung đáng ngờ.</p>
+        </article>
+
+        <article class="format-card">
+          <i class="fa-solid fa-link"></i>
+          <h3>Đường link</h3>
+          <p>Kiểm tra các đường dẫn và website có dấu hiệu bất thường.</p>
+        </article>
+
+        <article class="format-card">
+          <i class="fa-regular fa-image"></i>
+          <h3>Hình ảnh</h3>
+          <p>Hình ảnh, mã QR hoặc ảnh chụp nội dung cần xác minh.</p>
+        </article>
+
+        <article class="format-card">
+          <i class="fa-solid fa-microphone"></i>
+          <h3>Âm thanh</h3>
+          <p>Tệp ghi âm hoặc nội dung cuộc gọi cần kiểm tra.</p>
+        </article>
+
+        <article class="format-card">
+          <i class="fa-solid fa-video"></i>
+          <h3>Video</h3>
+          <p>Video có nội dung hoặc hình ảnh cần đánh giá.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 5 BƯỚC HƯỚNG DẪN -->
+    <section id="guide-steps" class="guide-steps-section section reveal">
+      <div class="section-heading">
+        <div class="eyebrow">02 • HOW TO USE</div>
+        <h2>Các bước <span>kiểm chứng thông tin</span></h2>
+        <p>Thực hiện lần lượt các bước dưới đây để sử dụng website.</p>
+      </div>
+
+      <div class="guide-timeline">
+
+        <article class="guide-step">
+          <div class="guide-step-number">01</div>
+          <div class="guide-step-icon">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+          <div class="guide-step-content">
+            <span>BƯỚC 1</span>
+            <h3>Tải thông tin cần kiểm tra</h3>
+            <p>
+              Tại giao diện “Kiểm tra điều bạn nghi ngờ”, chọn một trong
+              các danh mục tin nhắn, đường link, hình ảnh, âm thanh hoặc
+              video ở tab bên trái. Tiếp theo, tải hoặc nhập nội dung
+              tương ứng vào tab bên phải và nhấn “Phân tích AI”.
+            </p>
+          </div>
+        </article>
+
+        <article class="guide-step">
+          <div class="guide-step-number">02</div>
+          <div class="guide-step-icon">
+            <i class="fa-solid fa-microchip"></i>
+          </div>
+          <div class="guide-step-content">
+            <span>BƯỚC 2</span>
+            <h3>Tiến hành phân tích</h3>
+            <p>
+              Chờ website xử lý dữ liệu đầu vào và phân tích những dấu hiệu
+              giả mạo, lừa đảo có thể xuất hiện trong nội dung.
+            </p>
+          </div>
+        </article>
+
+        <article class="guide-step">
+          <div class="guide-step-number">03</div>
+          <div class="guide-step-icon">
+            <i class="fa-solid fa-chart-column"></i>
+          </div>
+          <div class="guide-step-content">
+            <span>BƯỚC 3</span>
+            <h3>Xem kết quả đánh giá</h3>
+            <p>
+              Kết quả hiển thị mức độ rủi ro, các dấu hiệu đáng ngờ được
+              phát hiện, giải thích nguyên nhân và đưa ra cách kiểm chứng.
+            </p>
+          </div>
+        </article>
+
+        <article class="guide-step">
+          <div class="guide-step-number">04</div>
+          <div class="guide-step-icon">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+          <div class="guide-step-content">
+            <span>BƯỚC 4</span>
+            <h3>Kiểm chứng thông tin</h3>
+            <p>
+              Kiểm tra nguồn cung cấp thông tin, đối chiếu với các nguồn
+              chính thống và xác minh qua một kênh liên hệ độc lập.
+            </p>
+          </div>
+        </article>
+
+        <article class="guide-step">
+          <div class="guide-step-number">05</div>
+          <div class="guide-step-icon">
+            <i class="fa-solid fa-shield-heart"></i>
+          </div>
+          <div class="guide-step-content">
+            <span>BƯỚC 5</span>
+            <h3>Đưa ra quyết định an toàn</h3>
+            <p>
+              Căn cứ vào kết quả phân tích và thông tin đã xác minh
+              để quyết định cách xử lý phù hợp.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- GIỚI THIỆU CÁC CHỨC NĂNG -->
+    <section class="guide-features section reveal">
+      <div class="section-heading">
+        <div class="eyebrow">03 • WEBSITE FEATURES</div>
+        <h2>Các chức năng <span>trong giao diện</span></h2>
+      </div>
+
+      <div class="feature-grid">
+
+        <article class="feature-card">
+          <i class="fa-solid fa-house"></i>
+          <h3>Trang chủ</h3>
+          <p>
+            Giới thiệu thông điệp bảo vệ người dùng, các loại nội dung
+            phân tích, bảng AI Scanner và những thông tin tổng quan.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <i class="fa-solid fa-magnifying-glass-chart"></i>
+          <h3>Kiểm tra</h3>
+          <p>
+            Cho phép người dùng nhập hoặc tải nội dung cần kiểm tra
+            để nhận kết quả đánh giá và cảnh báo.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <i class="fa-solid fa-book-open"></i>
+          <h3>Kiến thức</h3>
+          <p>
+            Cung cấp các thủ đoạn lừa đảo phổ biến và dấu hiệu nhận biết
+            để người dùng nâng cao cảnh giác.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <i class="fa-solid fa-hand"></i>
+          <h3>Quy tắc STOP</h3>
+          <p>
+            Giúp người dùng bình tĩnh, suy nghĩ, xác minh và bảo vệ
+            bản thân khi gặp tình huống đáng ngờ.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <h3>Lịch sử tra cứu</h3>
+          <p>
+            Cho phép xem lại các lượt kiểm tra trước đó, theo dõi
+            kết quả phân tích và mức độ cảnh báo.
+          </p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- LƯU Ý -->
+    <section class="guide-warning section reveal">
+      <div class="warning-icon">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <div>
+        <h2>Lưu ý khi sử dụng</h2>
+        <p>
+          Kết quả phân tích của CHECKWISE chỉ mang tính chất hỗ trợ
+          tham khảo, không thay thế việc kiểm chứng từ các nguồn chính thống.
+          Không cung cấp mật khẩu, mã OTP hoặc thông tin cá nhân nhạy cảm
+          trong quá trình kiểm tra.
+        </p>
+      </div>
+    </section>
+
+    <div class="guide-back">
+      <a href="index.html" class="btn btn-ghost">
+        <i class="fa-solid fa-arrow-left"></i>
+        Quay về trang chủ
+      </a>
+
+      <a href="index.html#checker" class="btn btn-primary">
+        <i class="fa-solid fa-shield-halved"></i>
+        Trải nghiệm kiểm tra
+      </a>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="footer-brand">
+      <span class="brand-icon">
+        <i class="fa-solid fa-shield-halved"></i>
+      </span>
+      <strong>CHECKWISE</strong>
+    </div>
+    <p>
+      Công cụ giáo dục nhận biết dấu hiệu lừa đảo •
+      Kết quả AI chỉ mang tính tham khảo.
+    </p>
+    <span>© 2026 CHECKWISE</span>
+  </footer>
+<script src="js/app.js"></script>
+
+<script>
+  // Hiển thị các section có hiệu ứng reveal
+  document.querySelectorAll(".reveal").forEach(element => {
+    element.classList.add("show");
+  });
+</script>
+
+</body>
+</html>
