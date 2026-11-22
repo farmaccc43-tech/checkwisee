@@ -15,7 +15,7 @@ console.log("Serving from:", __dirname);
 const app = express();
 app.use(cors());
 
-// Server file tĩnh
+// Serve file tĩnh
 app.use(express.static(__dirname));
 
 // Trang chủ
@@ -24,28 +24,38 @@ app.get("/", (req, res) => {
   res.sendFile(path.resolve(__dirname, "index.html"));
 });
 
-// Tăng giới hạn dung lượng để nhận tệp ảnh kích thước lớn
+// Tăng giới hạn dung lượng để nhận tệp ảnh/video kích thước lớn
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-// THÊM ĐOẠN NÀY NGAY SAU const ai
-
 const MODELS = ["gemini-3.5-flash-lite", "gemini-3.8-flash"];
 
 const SYSTEM_INSTRUCTION = `
-  Bạn là chuyên gia an ninh mạng và phòng chống lừa đảo.
-  
+  Bạn là chuyên gia an ninh mạng và phòng chống lừa đảo của hệ thống CheckWise.
+
   NHIỆM VỤ:
-  BƯỚC 1: TRÍCH XUẤT VÀ PHÂN TÍCH NỘI DUNG (QUAN TRỌNG)
-  - Nếu có hình ảnh/tệp: Bạn PHẢI đọc kỹ và trích xuất toàn bộ văn bản (OCR) xuất hiện trong đó (kể cả chữ nhỏ, mờ, watermark). Viết phần văn bản đọc được này lên đầu.
-  - Nếu là văn bản/URL: Đọc trực tiếp.
-  
+  BƯỚC 1: TRÍCH XUẤT VÀ PHÂN TÍCH NỘI DUNG
+  - Nếu có hình ảnh/tệp: Đọc kỹ và trích xuất toàn bộ văn bản/chi tiết quan trọng (kể cả chữ nhỏ, mờ, tên tài khoản, logo). Viết ngắn gọn, rõ ý (tối đa 3-4 dòng).
+  - Nếu là văn bản/URL: Tóm tắt nội dung chính và các điểm cần chú ý thật ngắn gọn.
+
   BƯỚC 2: PHÂN TÍCH VÀ ĐÁNH GIÁ RỦI RO
-  - Kiểm tra các dấu hiệu lừa đảo, giả mạo thương hiệu, yêu cầu chuyển tiền/OTP.
-  - Đưa ra kết luận mức độ: LOW (Thấp), MEDIUM (Trung bình), hoặc HIGH (Cao) kèm khuyến nghị cụ thể.
-  `;
+  - Nhận diện ngắn gọn các dấu hiệu lừa đảo, giả mạo thương hiệu/cơ quan, ép gấp, yêu cầu chuyển tiền/OTP/bật camera lạ (tối đa 3-4 gạch đầu dòng ngắn).
+
+  KHUYẾN NGHỊ:
+  - Đưa ra 2-3 hành động cụ thể, ngắn gọn, dễ hiểu để người dùng tự bảo vệ.
+
+  BẮT BUỘC KẾT THÚC BẰNG ĐÚNG 2 DÒNG NÀY (không thêm ký tự markdown như ** hay # vào 2 dòng này):
+  MUC_DO: AN_TOAN | CHUA_XAC_DINH | CANH_GIAC | NGUY_HIEM
+  PHAN_TRAM_RUI_RO: <số nguyên từ 0 đến 100>
+
+  Quy ước phân loại:
+  - AN_TOAN (0–20%): Không phát hiện dấu hiệu lừa đảo hoặc nguy cơ đáng kể.
+  - CHUA_XAC_DINH (21–45%): Thông tin thiếu ngữ cảnh hoặc chưa đủ dữ liệu để kết luận chắc chắn.
+  - CANH_GIAC (46–74%): Có yếu tố đáng ngờ, cần xác minh kỹ trước khi thao tác.
+  - NGUY_HIEM (75–100%): Dấu hiệu lừa đảo/mạo danh/chiếm đoạt rõ ràng, rủi ro cao.
+`;
 
 async function generateWithFallback(contents) {
   let lastError;
@@ -53,7 +63,7 @@ async function generateWithFallback(contents) {
   for (const model of MODELS) {
     try {
       const t0 = Date.now();
-      console.log(`[${new Date().toISOString()}] Trying model: ${model}`);
+      console.log(`[${new Date().toISOString()}] Trying model:${model}`);
 
       const response = await ai.models.generateContent({
         model,
@@ -61,7 +71,6 @@ async function generateWithFallback(contents) {
         config: {
           systemInstruction: SYSTEM_INSTRUCTION,
           maxOutputTokens: 2048,
-          // Giảm thời gian thinking
           thinkingConfig: {
             thinkingLevel: "low",
           },
@@ -69,39 +78,17 @@ async function generateWithFallback(contents) {
       });
 
       const elapsedSec = ((Date.now() - t0) / 1000).toFixed(1);
-      console.log(`Success with ${model} (${elapsedSec}s)`);
-      if (response.usageMetadata) {
-        const { promptTokenCount, thoughtsTokenCount, candidatesTokenCount } =
-          response.usageMetadata;
-        console.log(
-          `  tokens -> prompt: ${promptTokenCount}, thoughts: ${
-            thoughtsTokenCount ?? 0
-          }, output: ${candidatesTokenCount}`
+      console.log(`Success with ${model} (${elapsedSec}s)`); if (response.usageMetadata) { const { promptTokenCount, thoughtsTokenCount, candidatesTokenCount } = response.usageMetadata; console.log( `  tokens -> prompt: ${promptTokenCount}, thoughts: ${ thoughtsTokenCount ?? 0 }, output: ${candidatesTokenCount}`
         );
       }
       return response;
     } catch (error) {
-      console.error(`${model} failed:`, error.status, error.message);
-      lastError = error;
-
-      if (error.status !== 503) {
-        throw error;
-      }
-    }
-  }
-
-  throw lastError;
-}
-
-app.post("/api/analyze", async (req, res) => {
-  const reqStart = Date.now();
-  console.log(`[${new Date().toISOString()}] POST /api/analyze received`);
+      console.error(`${model} failed:`, error.status, error.message); lastError = error;  if (error.status !== 503) { throw error; } } }  throw lastError; }  app.post("/api/analyze", async (req, res) => { const reqStart = Date.now(); console.log(`[${new Date().toISOString()}] POST /api/analyze received`);
   try {
     const { promptText, fileData, mimeType } = req.body;
 
     let contents = [];
 
-    // Nếu có tệp dữ liệu đính kèm (hình ảnh, âm thanh, video)
     if (fileData) {
       contents.push({
         inlineData: {
@@ -123,7 +110,7 @@ app.post("/api/analyze", async (req, res) => {
     );
     res.json({ success: true, result: response.text });
   } catch (error) {
-    console.error("Lỗi khi gọi Gemini AI:", error);
+    console.error("Lỗi khi gọi CheckWise AI:", error);
     res.status(500).json({ success: false, error: error.message });
   }
 });

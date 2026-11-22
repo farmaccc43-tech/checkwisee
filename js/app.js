@@ -162,10 +162,9 @@ if (analyzeBtn) {
 
     analyzeBtn.disabled = true;
     analyzeBtn.innerHTML =
-      '<i class="fa-solid fa-spinner fa-spin"></i> AI đang phân tích...';
+      '<i class="fa-solid fa-spinner fa-spin"></i> CheckWise đang phân tích...';
 
     try {
-      // Dùng đường dẫn tương đối để chạy chuẩn xác cho cả Local (khi server.js serve file tĩnh) lẫn trên Render
       const response = await fetch("/api/analyze", {
         method: "POST",
         headers: {
@@ -183,18 +182,162 @@ if (analyzeBtn) {
         showAIResult(data.result);
         saveScanHistory(currentType, contentToAnalyze, data.result);
       } else {
-        alert("Lỗi từ AI: " + data.error);
+        alert("Lỗi từ CheckWise AI: " + data.error);
       }
     } catch (error) {
       console.error(error);
-      alert(
-        "Không thể kết nối đến Server Backend."
-      );
+      alert("Không thể kết nối đến Server Backend.");
     } finally {
       analyzeBtn.disabled = false;
       analyzeBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> Phân tích AI';
     }
   });
+}
+
+// =========================================================
+// XỬ LÝ & HIỂN THỊ BÁO CÁO CHUYÊN SÂU TỪ CHECKWISE (3 Ô NGANG + 4 MỨC)
+// =========================================================
+function formatInlineMarkdown(str) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+    .replace(/`([^`]+)`/g, "<code>$1</code>");
+}
+
+function parseAIReport(rawText) {
+  const text = String(rawText || "");
+
+  // Bóc tách MUC_DO
+  const levelMatch = text.match(
+    /MUC_DO\s*:\s*(AN_TOAN|CHUA_XAC_DINH|CANH_GIAC|NGUY_HIEM)/i
+  );
+
+  // Bóc tách PHAN_TRAM_RUI_RO
+  let percent = null;
+  const pctMatch = text.match(/PHAN_TRAM_RUI_RO\s*:\s*(\d{1,3})/i);
+  if (pctMatch) {
+    percent = Math.max(0, Math.min(100, parseInt(pctMatch[1], 10)));
+  } else {
+    const anyPct = text.match(/(\d{1,3})\s*%/);
+    if (anyPct) {
+      percent = Math.max(0, Math.min(100, parseInt(anyPct[1], 10)));
+    }
+  }
+
+  // Làm sạch metadata và ký tự thừa
+  const cleaned = text
+    .replace(/^\s*MUC_DO\s*:.*$/gim, "")
+    .replace(/^\s*PHAN_TRAM_RUI_RO\s*:.*$/gim, "")
+    .replace(/^---+\s*$/gm, "")
+    .trim();
+
+  // Tách 3 mục ngắn gọn
+  const step1Match = cleaned.match(
+    /(?:###\s*)?BƯỚC\s*1[\s\S]*?(?=(?:###\s*)?BƯỚC\s*2|$)/i
+  );
+  const step2Match = cleaned.match(
+    /(?:###\s*)?BƯỚC\s*2[\s\S]*?(?=(?:###\s*)?KHUYẾN\s*NGHỊ|$)/i
+  );
+  const recMatch = cleaned.match(/(?:###\s*)?KHUYẾN\s*NGHỊ[\s\S]*$/i);
+
+  const cleanSection = (chunk, headingRegex) => {
+    if (!chunk) return "";
+    return chunk
+      .replace(headingRegex, "")
+      .replace(/^\s*[-*+]\s+/gm, "• ")
+      .replace(/\n{2,}/g, "\n")
+      .trim();
+  };
+
+  let box1 = cleanSection(
+    step1Match ? step1Match[0] : "",
+    /^(?:###\s*)?BƯỚC\s*1[^\n]*\n?/i
+  );
+  let box2 = cleanSection(
+    step2Match ? step2Match[0] : "",
+    /^(?:###\s*)?BƯỚC\s*2[^\n]*\n?/i
+  );
+  let box3 = cleanSection(
+    recMatch ? recMatch[0] : "",
+    /^(?:###\s*)?KHUYẾN\s*NGHỊ[^\n]*\n?/i
+  );
+
+  // Fallback nếu AI trả về đoạn tự do
+  if (!box1 && !box2 && !box3) {
+    const paras = cleaned
+      .split(/\n\s*\n/)
+      .map((p) => p.trim())
+      .filter(Boolean);
+    box1 = paras[0] || "Đã tiếp nhận nội dung để kiểm tra.";
+    box2 = paras[1] || "Đang tổng hợp các yếu tố rủi ro từ nội dung.";
+    box3 =
+      paras[2] || "Xác minh thông tin qua kênh chính thức trước khi thao tác.";
+  }
+
+  // Xác định 1 trong 4 mức: An toàn | Chưa xác định | Cảnh giác | Nguy hiểm
+  let levelKey = levelMatch ? levelMatch[1].toUpperCase() : null;
+  if (!levelKey) {
+    if (/NGUY\s*HIỂM|HIGH|LỪA ĐẢO RÕ RÀNG|MẠO DANH/i.test(cleaned)) {
+      levelKey = "NGUY_HIEM";
+    } else if (/CẢNH\s*GIÁC|MEDIUM|TRUNG BÌNH|ĐÁNG NGỜ/i.test(cleaned)) {
+      levelKey = "CANH_GIAC";
+    } else if (/CHƯA\s*XÁC\s*ĐỊNH|UNKNOWN|KHÔNG ĐỦ/i.test(cleaned)) {
+      levelKey = "CHUA_XAC_DINH";
+    } else {
+      levelKey = "AN_TOAN";
+    }
+  }
+
+  const levelMap = {
+    AN_TOAN: {
+      label: "AN TOÀN",
+      cssClass: "safe",
+      defaultPct: 12,
+    },
+    CHUA_XAC_DINH: {
+      label: "CHƯA XÁC ĐỊNH",
+      cssClass: "unknown",
+      defaultPct: 35,
+    },
+    CANH_GIAC: {
+      label: "CẢNH GIÁC",
+      cssClass: "caution",
+      defaultPct: 62,
+    },
+    NGUY_HIEM: {
+      label: "NGUY HIỂM",
+      cssClass: "danger",
+      defaultPct: 88,
+    },
+  };
+
+  const meta = levelMap[levelKey];
+  const finalPct = percent !== null ? percent : meta.defaultPct;
+
+  return {
+    meta,
+    percent: finalPct,
+    cards: [
+      {
+        title: "Nội dung ghi nhận",
+        icon: "fa-file-lines",
+        body: box1 || "Không trích xuất được thêm nội dung chi tiết.",
+      },
+      {
+        title: "Dấu hiệu & đánh giá",
+        icon: "fa-magnifying-glass-chart",
+        body: box2 || "Chưa ghi nhận dấu hiệu bất thường nổi bật.",
+      },
+      {
+        title: "Khuyến nghị xử lý",
+        icon: "fa-shield-halved",
+        body:
+          box3 || "Thận trọng khi chia sẻ thông tin cá nhân hoặc chuyển tiền.",
+      },
+    ],
+  };
 }
 
 function showAIResult(aiText) {
@@ -205,28 +348,50 @@ function showAIResult(aiText) {
   const meterFill = $("#meterFill");
   const findingsContainer = $("#findings");
 
+  const report = parseAIReport(aiText);
+
   if (resultSection) {
     resultSection.classList.remove("hidden");
     resultSection.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
-  if (resultTitle)
-    resultTitle.textContent = "Báo cáo phân tích chuyên sâu từ AI Gemini";
-  if (riskBadge) {
-    riskBadge.textContent = "HOÀN TẤT";
-    riskBadge.className = "risk medium";
+  if (resultTitle) {
+    resultTitle.textContent = "Báo cáo chuyên sâu từ CheckWise";
   }
-  if (riskScore) riskScore.textContent = "AI Check";
-  if (meterFill) meterFill.style.width = "85%";
+
+  if (riskBadge) {
+    riskBadge.textContent = report.meta.label;
+    riskBadge.className = `risk ${report.meta.cssClass}`;
+  }
+
+  if (riskScore) {
+    riskScore.textContent = `${report.percent}% • ${report.meta.label}`;
+  }
+
+  if (meterFill) {
+    meterFill.style.width = "0%";
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        meterFill.style.width = `${report.percent}%`;
+      });
+    });
+  }
 
   if (findingsContainer) {
-    findingsContainer.innerHTML = `
-      <div class="finding" style="grid-column: 1 / -1; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 8px;">
-        <i class="fa-solid fa-shield-halved" style="font-size: 24px; margin-bottom: 10px; color: var(--cyan, #25d9ff);"></i>
-        <strong style="font-size: 1.1rem; display: block; margin-bottom: 8px;">Kết quả đánh giá chi tiết:</strong>
-        <p style="line-height: 1.6; color: #e2e8f0; white-space: pre-line;">${aiText}</p>
-      </div>
-    `;
+    findingsContainer.className = "findings findings-horizontal";
+    findingsContainer.innerHTML = report.cards
+      .map(
+        (card) => `
+        <div class="finding finding-card">
+          <div class="finding-top">
+            <i class="fa-solid ${card.icon}"></i>
+            <strong>${card.title}</strong>
+          </div>
+          <p class="finding-body">${formatInlineMarkdown(card.body)}</p>
+        </div>
+      `
+      )
+      .join("");
   }
 }
 
@@ -244,9 +409,10 @@ const copyResultBtn = $("#copyResult");
 if (copyResultBtn) {
   copyResultBtn.addEventListener("click", async () => {
     try {
+      const scoreText = $("#riskScore") ? $("#riskScore").innerText : "";
       const findingsText = $("#findings") ? $("#findings").innerText : "";
       await navigator.clipboard.writeText(
-        `CHECKWISE AI Report:\n${findingsText}`
+        `Báo cáo chuyên sâu từ CheckWise (${scoreText}):\n${findingsText}`
       );
       alert("Đã sao chép kết quả vào bộ nhớ tạm.");
     } catch (e) {}
@@ -328,7 +494,6 @@ function updateNavbarAuthUI() {
   }
 }
 
-// Xử lý ẩn hiện Dropdown User trên Navbar
 $("#userProfileTrigger")?.addEventListener("click", (e) => {
   e.stopPropagation();
   $("#userDropdownMenu")?.classList.toggle("hidden");
@@ -338,7 +503,6 @@ document.addEventListener("click", () => {
   $("#userDropdownMenu")?.classList.add("hidden");
 });
 
-// Xử lý Đăng xuất
 $("#logoutBtn")?.addEventListener("click", () => {
   localStorage.removeItem(SESSION_KEY);
   updateNavbarAuthUI();
@@ -398,7 +562,7 @@ function renderHistoryList() {
           <span class="history-time">${item.createdAt}</span>
         </div>
         <div class="history-snippet">${item.input.replace(/</g, "&lt;")}</div>
-        <div class="history-action-hint">Bấm để xem lại báo cáo AI →</div>
+        <div class="history-action-hint">Bấm để xem lại báo cáo CheckWise →</div>
       </div>
     `
     )
@@ -419,7 +583,7 @@ function openHistoryDrawer() {
   renderHistoryList();
   const drawer = $("#historyDrawer");
   const overlay = $("#historyOverlay");
-  
+
   if (drawer) {
     drawer.classList.remove("hidden");
     setTimeout(() => drawer.classList.add("open"), 10);
@@ -432,7 +596,7 @@ function openHistoryDrawer() {
 function closeHistoryDrawer() {
   const drawer = $("#historyDrawer");
   const overlay = $("#historyOverlay");
-  
+
   if (drawer) {
     drawer.classList.remove("open");
     setTimeout(() => drawer.classList.add("hidden"), 300);
@@ -442,13 +606,11 @@ function closeHistoryDrawer() {
   }
 }
 
-// Gắn sự kiện mở/đóng ngăn kéo lịch sử
 $("#toggleHistoryBtn")?.addEventListener("click", openHistoryDrawer);
 $("#dropdownHistoryBtn")?.addEventListener("click", openHistoryDrawer);
 $("#closeHistoryBtn")?.addEventListener("click", closeHistoryDrawer);
 $("#historyOverlay")?.addEventListener("click", closeHistoryDrawer);
 
-// Gắn sự kiện xóa toàn bộ lịch sử
 $("#clearHistoryBtn")?.addEventListener("click", () => {
   if (confirm("Bạn có chắc muốn xóa toàn bộ lịch sử tra cứu này?")) {
     localStorage.removeItem(getHistoryStorageKey());
@@ -456,5 +618,4 @@ $("#clearHistoryBtn")?.addEventListener("click", () => {
   }
 });
 
-// Khởi chạy kiểm tra trạng thái đăng nhập khi mở trang
 updateNavbarAuthUI();
